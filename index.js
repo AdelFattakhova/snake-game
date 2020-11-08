@@ -5,10 +5,11 @@ let squares = [];
 let currentSnake = [2, 1, 0];
 let direction = 1;
 let timerId = setTimeout(move, 1000);
-let gridWidth = 20;
+const gridWidth = 20;
+let appleIndex;
 
 function createGrid() {
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < gridWidth*gridWidth; i++) {
     const square = document.createElement('div');
     square.classList.add('square');
     squares.push(square);
@@ -20,6 +21,16 @@ createGrid();
 currentSnake.forEach(i => squares[i].classList.add('snake'))
 
 function move() {
+  if (
+    (currentSnake[0] + gridWidth >= gridWidth*gridWidth && direction === gridWidth) ||
+    (currentSnake[0] % gridWidth === 0 && direction === -1) ||
+    (currentSnake[0] - gridWidth < 0 && direction === -gridWidth) ||
+    (currentSnake[0] % gridWidth === gridWidth - 1 && direction === 1) ||
+    squares[currentSnake[0] + direction].classList.contains('snake')
+  ) {
+    return clearTimeout(timerId);
+  }
+  
   let tail = currentSnake.pop();
   squares[tail].classList.remove('snake');
   currentSnake.unshift(currentSnake[0] + direction);
@@ -44,3 +55,12 @@ function control(e) {
 }
 
 document.addEventListener('keydown', control);
+
+function generateApples() {
+  do {
+    appleIndex = Math.floor(Math.random() * squares.length);
+  } while(squares[appleIndex].classList.contains('snake'))
+  squares[appleIndex].classList.add('apple');
+}
+
+generateApples();
