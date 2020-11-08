@@ -1,13 +1,15 @@
 const grid = document.querySelector('.grid');
 const startBtn = document.getElementById('start');
-const score = document.getElementById('score');
+const scoreDisplay = document.getElementById('score');
 let squares = [];
 let currentSnake = [2, 1, 0];
+let score = 0;
+scoreDisplay.textContent = score;
 let direction = 1;
-let timerId = setTimeout(move, 1000);
 const gridWidth = 20;
 let appleIndex;
-let interalTime = 1000;
+let timerId = 0;
+let intervalTime = 1000;
 let speed = 0.9;
 
 function createGrid() {
@@ -21,6 +23,25 @@ function createGrid() {
 createGrid();
 
 currentSnake.forEach(i => squares[i].classList.add('snake'))
+
+function startGame() {
+  squares.forEach(square => square.classList.remove('snake'));
+  if (appleIndex) {
+    squares[appleIndex].classList.remove('apple');
+  }
+
+  clearTimeout(timerId);
+  currentSnake = [2, 1, 0];
+  currentSnake.forEach(item => squares[item].classList.add('snake'));
+  score = 0;
+  scoreDisplay.textContent = score;
+
+  direction = 1;
+  intervalTime = 1000;
+  timerId = setTimeout(move, intervalTime);
+
+  generateApples();
+}
 
 function move() {
   if (
@@ -43,29 +64,26 @@ function move() {
     currentSnake.push(tail);
     generateApples();
 
-    +score.textContent++;
+    score++;
+    scoreDisplay.textContent = score;
 
     clearTimeout(timerId);
-    interalTime *= speed;
-    timerId = setTimeout(move, interalTime);
+    intervalTime *= speed;
+    timerId = setTimeout(move, intervalTime);
   }
 
   squares[currentSnake[0]].classList.add('snake');
-  timerId = setTimeout(move, interalTime)
+  timerId = setTimeout(move, intervalTime)
 }
 
 function control(e) {
   if(e.keyCode === 39) {
-    console.log('right');
     direction = 1;
   } else if (e.keyCode === 38) {
-    console.log('up');
     direction = -gridWidth;
   } else if (e.keyCode === 37) {
-    console.log('left');
     direction = -1;
   } else if (e.keyCode === 40) {
-    console.log('down');
     direction = gridWidth;
   }
 }
@@ -79,4 +97,4 @@ function generateApples() {
   squares[appleIndex].classList.add('apple');
 }
 
-generateApples();
+startBtn.addEventListener('click', startGame);
