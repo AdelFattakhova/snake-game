@@ -7,6 +7,8 @@ let direction = 1;
 let timerId = setTimeout(move, 1000);
 const gridWidth = 20;
 let appleIndex;
+let interalTime = 1000;
+let speed = 0.9;
 
 function createGrid() {
   for (let i = 0; i < gridWidth*gridWidth; i++) {
@@ -34,8 +36,22 @@ function move() {
   let tail = currentSnake.pop();
   squares[tail].classList.remove('snake');
   currentSnake.unshift(currentSnake[0] + direction);
+
+  if (squares[currentSnake[0]].classList.contains('apple')) {
+    squares[currentSnake[0]].classList.remove('apple');
+    squares[tail].classList.add('snake');
+    currentSnake.push(tail);
+    generateApples();
+
+    +score.textContent++;
+
+    clearTimeout(timerId);
+    interalTime *= speed;
+    timerId = setTimeout(move, interalTime);
+  }
+
   squares[currentSnake[0]].classList.add('snake');
-  timerId = setTimeout(move, 1000)
+  timerId = setTimeout(move, interalTime)
 }
 
 function control(e) {
