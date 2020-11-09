@@ -25,12 +25,21 @@ createGrid();
 currentSnake.forEach(i => squares[i].classList.add('snake'))
 
 function startGame() {
+  if (grid.classList.contains('grid-faded')) {
+    grid.classList.remove('grid-faded');
+  }
+  clearTimeout(timerId);
+  setDefaults();
+  timerId = setTimeout(move, intervalTime);
+
+  generateApples();
+}
+
+function setDefaults() {
   squares.forEach(square => square.classList.remove('snake'));
   if (appleIndex) {
     squares[appleIndex].classList.remove('apple');
   }
-
-  clearTimeout(timerId);
   currentSnake = [2, 1, 0];
   currentSnake.forEach(item => squares[item].classList.add('snake'));
   score = 0;
@@ -38,9 +47,6 @@ function startGame() {
 
   direction = 1;
   intervalTime = 1000;
-  timerId = setTimeout(move, intervalTime);
-
-  generateApples();
 }
 
 function move() {
@@ -51,6 +57,8 @@ function move() {
     (currentSnake[0] % gridWidth === gridWidth - 1 && direction === 1) ||
     squares[currentSnake[0] + direction].classList.contains('snake')
   ) {
+    grid.classList.add('grid-faded');
+    setTimeout(setDefaults, 900);
     return clearTimeout(timerId);
   }
   
@@ -85,6 +93,10 @@ function control(e) {
     direction = -1;
   } else if (e.keyCode === 40) {
     direction = gridWidth;
+  }
+
+  if (e.keyCode === 32) {
+    startGame();
   }
 }
 
