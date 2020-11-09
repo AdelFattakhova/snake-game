@@ -92,10 +92,12 @@ function control(e) {
   } else if (e.keyCode === 37) {
     direction = -1;
   } else if (e.keyCode === 40) {
+    e.preventDefault();
     direction = gridWidth;
   }
 
   if (e.keyCode === 32) {
+    e.preventDefault();
     startGame();
   }
 }
