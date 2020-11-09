@@ -1,6 +1,6 @@
 # Snake Game
 This is a simple snake game.
-You can try it out [here](sssnake.netlify.app).
+You can try it out [here](https://sssnake.netlify.app).
 
 ## How to play
 1. Press the button Start/Restart or `space` to start the game.
