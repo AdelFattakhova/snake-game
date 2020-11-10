@@ -75,9 +75,7 @@ function move() {
     score++;
     scoreDisplay.textContent = score;
 
-    clearTimeout(timerId);
     intervalTime *= speed;
-    timerId = setTimeout(move, intervalTime);
   }
 
   squares[currentSnake[0]].classList.add('snake');
